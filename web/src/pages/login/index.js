@@ -15,6 +15,8 @@ class login extends Component {
       navigate: PropTypes.func,
     }).isRequired,
     authSignin: PropTypes.func.isRequired,
+    error: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
   };
 
   handleFormSubmit = (e) => {

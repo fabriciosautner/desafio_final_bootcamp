@@ -61,6 +61,10 @@ class History extends Component {
   render() {
     const { navigation, orders, empty } = this.props;
 
+    const date = new Date();
+    const offSet = date.getTimezoneOffset() / 60;
+    date.setHours(date.getHours() - offSet);
+
     return (
       <Container>
         <BackgroundTop
@@ -88,7 +92,7 @@ class History extends Component {
                 <Orders key={item.id}>
                   <Name>{`Pedido #${item.id}`}</Name>
                   <Details>
-                    {distanceInWords(new Date(), parse(item.created_at), {
+                    {distanceInWords(date, parse(item.created_at), {
                       addSuffix: true,
                       locale: pt,
                     })}

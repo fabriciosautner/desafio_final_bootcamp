@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Currency from 'react-currency-formatter';
 import { distanceInWords, parse } from 'date-fns';
 import pt from 'date-fns/locale/pt';
@@ -13,6 +13,21 @@ import Header from 'components/header';
 import { Container, Content, Body } from './styles';
 
 class main extends Component {
+  static propTypes = {
+    loadOrdersRequest: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+    }).isRequired,
+    orders: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        created_at: PropTypes.string.isRequired,
+        amount: PropTypes.string.isRequired,
+      }),
+    ]).isRequired,
+  };
+
   state = {};
 
   componentDidMount() {
@@ -23,6 +38,10 @@ class main extends Component {
 
   render() {
     const { orders } = this.props;
+
+    const date = new Date();
+    const offSet = date.getTimezoneOffset() / 60;
+    date.setHours(date.getHours() - offSet);
 
     return (
       <Container>
@@ -35,7 +54,7 @@ class main extends Component {
                 <div>
                   <p>{`Pedido #${item.id} - ${item.user.name}`}</p>
                   <small>
-                    {distanceInWords(new Date(), parse(item.created_at), {
+                    {distanceInWords(date, parse(item.created_at), {
                       addSuffix: true,
                       locale: pt,
                     })}
